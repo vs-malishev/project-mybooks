@@ -14,10 +14,9 @@ class BooksApp extends React.Component {
 		 * users can use the browser's back and forward buttons to navigate between
 		 * pages, as well as provide a good URL they can bookmark and share.
 		 */
-		books: [],
 		read: [],
-		currentlyReading: [],
 		wantToRead: [],
+		currentlyReading: [],
 		showSearchPage: true
 	}
 
@@ -42,21 +41,19 @@ class BooksApp extends React.Component {
 			}
 
 			this.setState((state) => ({
-				books: books,
 				read: read,
 				currentlyReading: currentlyReading,
 				wantToRead: wantToRead
 			}))
 
 			console.log(this.state)
-
 		})
 	}
 
 	render() {
 		return (
 			<div className="app">
-				<Route path="/search" render= {({ history }) => (
+				<Route path="/search" render={({ history }) => (
 					<SearchBooks/>
 				)}/>
 				<Route exact path="/" render={() => (
@@ -67,15 +64,15 @@ class BooksApp extends React.Component {
 						<div className="list-books-content">
 							<div>
 								<BookShelf
-									books="this.state.currentlyReading"
+									books={this.state.currentlyReading}
 									shelfName="Currently Reading"
 								/>
 								<BookShelf
-									books="this.state.wantToRead"
+									books={this.state.wantToRead}
 									shelfName="Want to Read"
 								/>
 								<BookShelf
-									books="this.state.read"
+									books={this.state.read}
 									shelfName="Read"
 								/>
 							</div>

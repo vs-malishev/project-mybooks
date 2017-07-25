@@ -10,6 +10,10 @@ class SearchBooks extends Component {
 		onSearchSubmit: PropTypes.func.isRequired
 	}
 
+	state = {
+		query: ''
+	}
+
 	render() {
 		return (
 			<div className="search-books">
