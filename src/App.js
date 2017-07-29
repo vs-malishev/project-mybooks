@@ -8,20 +8,15 @@ import './App.css'
 
 class BooksApp extends React.Component {
 	state = {
-		/**
-		 * TODO: Instead of using this state variable to keep track of which page
-		 * we're on, use the URL in the browser's address bar. This will ensure that
-		 * users can use the browser's back and forward buttons to navigate between
-		 * pages, as well as provide a good URL they can bookmark and share.
-		 */
-		read: [],
-		wantToRead: [],
-		currentlyReading: [],
-		searchResults: [],
-		showSearchPage: true
+		shelves: {
+			read: [],
+			currentlyReading: [],
+			wantToRead: []
+		},
+		searchResults: []
 	}
 
-	sortBooks(books) {
+	sortBooks = (books) => {
 		let read = []
 		let currentlyReading = []
 		let wantToRead = []
@@ -52,27 +47,24 @@ class BooksApp extends React.Component {
 
 			let shelves = this.sortBooks(books)
 
-			this.setState((state) => ({
-				read: shelves.read,
-				currentlyReading: shelves.currentlyReading,
-				wantToRead: shelves.wantToRead
-			}))
-
-			console.log(this.state)
+			this.setState({
+				shelves: shelves
+			})
 		})
 	}
 
-	moveBook(book, shelf) {
+	moveBook = (book, shelf) => {
 		BooksAPI.update(book, shelf).then((result) => {
 			console.log('book has been updated');
 		})
 	}
 
-	searchBooks(query) {
-		BooksAPI.search(query).then((result) => {
-			this.setState((state) => ({
-				searchResults: result
-			}))
+	searchBooks = (query) => {
+		BooksAPI.search(query).then((books) => {
+
+			this.setState({
+				searchResults: books
+			})
 		})
 	}
 
@@ -81,8 +73,9 @@ class BooksApp extends React.Component {
 			<div className="app">
 				<Route path="/search" render={({ history }) => (
 					<SearchBooks
-						onSearch="this.searchBooks"
+						onSearchSubmit={this.searchBooks}
 						searchResults={this.state.searchResults}
+						onShelfSelection={this.moveBook}
 					/>
 				)}/>
 				<Route exact path="/" render={() => (
@@ -93,17 +86,17 @@ class BooksApp extends React.Component {
 						<div className="list-books-content">
 							<div>
 								<BookShelf
-									books={this.state.currentlyReading}
+									books={this.state.shelves.currentlyReading}
 									shelfName="Currently Reading"
 									onShelfSelection={this.moveBook}
 								/>
 								<BookShelf
-									books={this.state.wantToRead}
+									books={this.state.shelves.wantToRead}
 									shelfName="Want to Read"
 									onShelfSelection={this.moveBook}
 								/>
 								<BookShelf
-									books={this.state.read}
+									books={this.state.shelves.read}
 									shelfName="Read"
 									onShelfSelection={this.moveBook}
 								/>

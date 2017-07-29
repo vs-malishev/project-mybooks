@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 
 class Book extends Component {
 	static PropTypes = {
-		bookContent: PropTypes.array.isRequired
+		book: PropTypes.array.isRequired
 	}
 
 	render() {
-		const { bookContent } = this.props
+		const { book, onShelfSelection } = this.props
 
 		return (
 			<div className="book">
@@ -15,9 +15,11 @@ class Book extends Component {
 					<div className="book-cover" style={{
 						width: 128,
 						height: 188,
-						backgroundImage: `url(${bookContent.imageLinks.thumbnail})` }}></div>
+						backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
 					<div className="book-shelf-changer">
-						<select>
+						<select
+							onChange={(event) => onShelfSelection(book, event.target.value)}
+						>
 							<option value="none" disabled>Move to...</option>
 							<option value="currentlyReading">Currently Reading</option>
 							<option value="wantToRead">Want to Read</option>
@@ -26,12 +28,15 @@ class Book extends Component {
 						</select>
 					</div>
 				</div>
-				<div className="book-title">{bookContent.title}</div>
-				{bookContent.authors.map((author, index) => (
-					<div key={index} className="book-authors">
-						{author}
-					</div>
-				))}
+				<div className="book-title">{book.title}</div>
+				{book.authors &&
+				//checking if authors array defined. One record didn't have an authors array
+					book.authors.map((author, index) => (
+						<div key={index} className="book-authors">
+							{author}
+						</div>
+					))
+				}
 			</div>
 		)
 	}
