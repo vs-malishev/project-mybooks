@@ -42,6 +42,21 @@ class BooksApp extends React.Component {
 		}
 	}
 
+	updateShelves = (book, shelf) => {
+		let currentShelf = this.state.shelves[book.shelf]
+
+		if (shelf !== 'none') {
+			this.state.shelves[shelf].push(book)
+			book.shelf = shelf
+		}
+
+		if (currentShelf) {
+			currentShelf.splice(currentShelf.indexOf(book), 1)
+		}
+
+		this.setState(this.state.shelves)
+	}
+
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
 
@@ -55,7 +70,7 @@ class BooksApp extends React.Component {
 
 	moveBook = (book, shelf) => {
 		BooksAPI.update(book, shelf).then((result) => {
-			console.log('book has been updated');
+			this.updateShelves(book, shelf)
 		})
 	}
 

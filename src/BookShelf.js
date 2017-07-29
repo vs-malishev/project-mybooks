@@ -11,7 +11,6 @@ class BookShelf extends Component {
 	render() {
 		const { books, shelfName, onShelfSelection } = this.props
 
-		console.log(this.props)
 		return (
 			<div className="bookshelf">
 				<h2 className="bookshelf-title">{shelfName}</h2>

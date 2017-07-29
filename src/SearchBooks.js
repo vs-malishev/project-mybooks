@@ -28,7 +28,7 @@ class SearchBooks extends Component {
 	render() {
 		const { searchResults, onShelfSelection } = this.props
 		const { query} = this.state
-		console.log(this.props);
+
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
