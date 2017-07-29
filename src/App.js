@@ -21,30 +21,41 @@ class BooksApp extends React.Component {
 		showSearchPage: true
 	}
 
-	componentDidMount() {
-		BooksAPI.getAll().then((books) => {
-			let read = []
-			let currentlyReading = []
-			let wantToRead = []
+	sortBooks(books) {
+		let read = []
+		let currentlyReading = []
+		let wantToRead = []
 
-			for(let i in books) {
-				if (books[i].shelf === 'read') {
-					read.push(books[i])
-				}
-
-				if (books[i].shelf === 'currentlyReading') {
-					currentlyReading.push(books[i])
-				}
-
-				if (books[i].shelf === 'wantToRead') {
-					wantToRead.push(books[i])
-				}
+		for(let i in books) {
+			if (books[i].shelf === 'read') {
+				read.push(books[i])
 			}
 
+			if (books[i].shelf === 'currentlyReading') {
+				currentlyReading.push(books[i])
+			}
+
+			if (books[i].shelf === 'wantToRead') {
+				wantToRead.push(books[i])
+			}
+		}
+
+		return {
+			read: read,
+			currentlyReading: currentlyReading,
+			wantToRead: wantToRead
+		}
+	}
+
+	componentDidMount() {
+		BooksAPI.getAll().then((books) => {
+
+			let shelves = this.sortBooks(books)
+
 			this.setState((state) => ({
-				read: read,
-				currentlyReading: currentlyReading,
-				wantToRead: wantToRead
+				read: shelves.read,
+				currentlyReading: shelves.currentlyReading,
+				wantToRead: shelves.wantToRead
 			}))
 
 			console.log(this.state)
