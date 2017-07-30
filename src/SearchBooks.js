@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 class SearchBooks extends Component {
 	static PropTypes = {
-		results: PropTypes.array.isRequired,
-		onSearchSubmit: PropTypes.func.isRequired
+		searchResults: PropTypes.array.isRequired,
+		onShelfSelection: PropTypes.func.isRequired
 	}
 
 	state = {
@@ -15,11 +15,9 @@ class SearchBooks extends Component {
 
 	updateQuery = (query) => {
 		const { onSearchSubmit } = this.props
-		let keyword = query.trim()
 
-		this.setState({ query: keyword })
-
-		onSearchSubmit(keyword)
+		this.setState({ query: query })
+		onSearchSubmit(query)
 	}
 
 	render() {

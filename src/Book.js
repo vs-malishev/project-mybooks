@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 
 class Book extends Component {
 	static PropTypes = {
-		book: PropTypes.array.isRequired
+		book: PropTypes.object.isRequired,
+		onShelfSelection: PropTypes.func.isRequired
 	}
 
 	render() {
@@ -15,7 +16,7 @@ class Book extends Component {
 					<div className="book-cover" style={{
 						width: 128,
 						height: 188,
-						backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+						backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}></div>
 					<div className="book-shelf-changer">
 						<select
 							onChange={(event) => onShelfSelection(book, event.target.value)}
@@ -30,14 +31,11 @@ class Book extends Component {
 					</div>
 				</div>
 				<div className="book-title">{book.title}</div>
-				{book.authors &&
-				//checking if authors array defined. One record didn't have an authors array
-					book.authors.map((author, index) => (
-						<div key={index} className="book-authors">
-							{author}
-						</div>
-					))
-				}
+				{book.authors && book.authors.map((author, index) => (
+					<div key={index} className="book-authors">
+						{author}
+					</div>
+				))}
 			</div>
 		)
 	}
