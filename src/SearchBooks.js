@@ -14,15 +14,12 @@ class SearchBooks extends Component {
 	}
 
 	updateQuery = (query) => {
-		this.setState({ query: query.trim() })
-	}
-
-	handleKeyPress = (event) => {
 		const { onSearchSubmit } = this.props
+		let keyword = query.trim()
 
-		if (event.key === 'Enter') {
-			onSearchSubmit(this.state.query)
-		}
+		this.setState({ query: keyword })
+
+		onSearchSubmit(keyword)
 	}
 
 	render() {
@@ -42,20 +39,21 @@ class SearchBooks extends Component {
 							placeholder="Search by title or author"
 							value={query}
 							onChange={(event) => this.updateQuery(event.target.value)}
-							onKeyPress={this.handleKeyPress.bind(this)}
 						/>
 					</div>
 				</div>
 				<div className="search-books-results">
 					<ol className="books-grid">
-						{searchResults.map((book, index) => (
-							<li key={index}>
-								<Book
-									onShelfSelection={onShelfSelection}
-									book={book}
-								/>
-							</li>
-						))}
+						{Array.isArray(searchResults) && (
+							searchResults.map((book, index) => (
+								<li key={index}>
+									<Book
+										onShelfSelection={onShelfSelection}
+										book={book}
+									/>
+								</li>
+							))
+						)}
 					</ol>
 				</div>
 			</div>
