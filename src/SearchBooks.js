@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Book from './Book'
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import sortBy from 'sort-by'
 
 class SearchBooks extends Component {
 	static PropTypes = {
@@ -15,14 +16,25 @@ class SearchBooks extends Component {
 
 	updateQuery = (query) => {
 		const { onSearchSubmit } = this.props
-
-		this.setState({ query: query })
+		this.setState((state) => ({
+			query: query
+		}))
 		onSearchSubmit(query)
 	}
 
 	render() {
 		const { searchResults, onShelfSelection } = this.props
 		const { query} = this.state
+
+		let results
+
+		if (!Array.isArray(searchResults) || query === '') {
+			results = []
+		} else {
+			results = searchResults
+		}
+
+		results.sort(sortBy('title'))
 
 		return (
 			<div className="search-books">
@@ -35,23 +47,21 @@ class SearchBooks extends Component {
 						<input
 							type="text"
 							placeholder="Search by title or author"
-							value={query}
+							value={ query }
 							onChange={(event) => this.updateQuery(event.target.value)}
 						/>
 					</div>
 				</div>
 				<div className="search-books-results">
 					<ol className="books-grid">
-						{Array.isArray(searchResults) && (
-							searchResults.map((book, index) => (
-								<li key={index}>
-									<Book
-										onShelfSelection={onShelfSelection}
-										book={book}
-									/>
-								</li>
-							))
-						)}
+						{results.map((book, index) => (
+							<li key={ index }>
+								<Book
+									onShelfSelection={ onShelfSelection }
+									book={ book }
+								/>
+							</li>
+						))}
 					</ol>
 				</div>
 			</div>

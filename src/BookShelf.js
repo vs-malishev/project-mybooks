@@ -14,14 +14,14 @@ class BookShelf extends Component {
 
 		return (
 			<div className="bookshelf">
-				<h2 className="bookshelf-title">{shelfName}</h2>
+				<h2 className="bookshelf-title">{ shelfName }</h2>
 				<div className="bookshelf-books">
 					<ol className="books-grid">
 						{books.map((book, index) => (
-							<li key={index}>
+							<li key={ index }>
 								<Book
-									book={book}
-									onShelfSelection={onShelfSelection}
+									book={ book }
+									onShelfSelection={ onShelfSelection }
 								/>
 							</li>
 						))}

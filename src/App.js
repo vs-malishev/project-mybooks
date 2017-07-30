@@ -43,7 +43,13 @@ class BooksApp extends React.Component {
 	}
 
 	updateShelves = (book, shelf) => {
-		let currentShelf = this.state.shelves[book.shelf]
+		let currentShelf
+
+		if (!book || !shelf) {
+			return
+		}
+
+		currentShelf= this.state.shelves[book.shelf]
 
 		if (shelf !== 'none') {
 			this.state.shelves[shelf].push(book)
@@ -59,7 +65,6 @@ class BooksApp extends React.Component {
 
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
-
 			let shelves = this.sortBooks(books)
 
 			this.setState({
@@ -69,20 +74,23 @@ class BooksApp extends React.Component {
 	}
 
 	moveBook = (book, shelf) => {
+		if (!book || !shelf) {
+			return
+		}
+
 		BooksAPI.update(book, shelf).then((result) => {
 			this.updateShelves(book, shelf)
 		})
 	}
 
 	searchBooks = (query) => {
+		if (!query || query === '') {
+			return
+		}
+
 		BooksAPI.search(query).then((books) => {
 			this.setState({
 				searchResults: books
-			})
-		})
-		.catch((error) => {
-			this.setState({
-				searchResults: []
 			})
 		})
 	}
@@ -92,9 +100,9 @@ class BooksApp extends React.Component {
 			<div className="app">
 				<Route path="/search" render={({ history }) => (
 					<SearchBooks
-						onSearchSubmit={this.searchBooks}
-						searchResults={this.state.searchResults}
-						onShelfSelection={this.moveBook}
+						onSearchSubmit={ this.searchBooks }
+						searchResults={ this.state.searchResults }
+						onShelfSelection={ this.moveBook }
 					/>
 				)}/>
 				<Route exact path="/" render={() => (
@@ -105,19 +113,19 @@ class BooksApp extends React.Component {
 						<div className="list-books-content">
 							<div>
 								<BookShelf
-									books={this.state.shelves.currentlyReading}
+									books={ this.state.shelves.currentlyReading }
 									shelfName="Currently Reading"
-									onShelfSelection={this.moveBook}
+									onShelfSelection={ this.moveBook }
 								/>
 								<BookShelf
-									books={this.state.shelves.wantToRead}
+									books={ this.state.shelves.wantToRead }
 									shelfName="Want to Read"
-									onShelfSelection={this.moveBook}
+									onShelfSelection={ this.moveBook }
 								/>
 								<BookShelf
-									books={this.state.shelves.read}
+									books={ this.state.shelves.read }
 									shelfName="Read"
-									onShelfSelection={this.moveBook}
+									onShelfSelection={ this.moveBook }
 								/>
 							</div>
 						</div>
