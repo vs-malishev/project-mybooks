@@ -1,6 +1,6 @@
 # Project MyBooks
 
-Application built and delivered as a part of Udacity React nanodegree course.
+Application built and delivered as a part of Udacity React Nanodegree Course.
 
 ## Requirements
 * Node
