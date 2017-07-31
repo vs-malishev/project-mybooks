@@ -6,6 +6,7 @@ import sortBy from 'sort-by'
 
 class SearchBooks extends Component {
 	static PropTypes = {
+		books: PropTypes.array.isRequired,
 		searchResults: PropTypes.array.isRequired,
 		onShelfSelection: PropTypes.func.isRequired
 	}
