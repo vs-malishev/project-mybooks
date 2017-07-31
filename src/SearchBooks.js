@@ -14,6 +14,10 @@ class SearchBooks extends Component {
 		query: ''
 	}
 
+	/**
+	* @description Update query and make a search call to API
+	* @param {string} query
+	*/
 	updateQuery = (query) => {
 		const { onSearchSubmit } = this.props
 		this.setState((state) => ({

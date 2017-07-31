@@ -16,6 +16,11 @@ class BooksApp extends React.Component {
 		searchResults: []
 	}
 
+	/**
+	* @description Sort the books between three shelves
+	* @param {array} books
+	* @returns {object} Object with three shelves
+	*/
 	sortBooks = (books) => {
 		let read = []
 		let currentlyReading = []
@@ -42,6 +47,11 @@ class BooksApp extends React.Component {
 		}
 	}
 
+	/**
+	* @description Method to the book from one shelf to another
+	* @param {object} book
+	* @param {string} shelf
+	*/
 	updateShelves = (book, shelf) => {
 		let currentShelf
 
@@ -63,6 +73,9 @@ class BooksApp extends React.Component {
 		this.setState(this.state.shelves)
 	}
 
+	/**
+	* @description Method to make a call to get all books
+	*/
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
 			let shelves = this.sortBooks(books)
@@ -73,6 +86,11 @@ class BooksApp extends React.Component {
 		})
 	}
 
+	/**
+	* @description Method to make a call and update shelf param in the selected book
+	* @param {object} book
+	* @param {string} shelf
+	*/
 	moveBook = (book, shelf) => {
 		if (!book || !shelf) {
 			return
@@ -83,6 +101,10 @@ class BooksApp extends React.Component {
 		})
 	}
 
+	/**
+	* @description Method to make a call and search the books based in the query
+	* @param {string} query
+	*/
 	searchBooks = (query) => {
 		if (!query || query === '') {
 			return
