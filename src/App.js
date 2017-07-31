@@ -8,69 +8,8 @@ import './App.css'
 
 class BooksApp extends React.Component {
 	state = {
-		shelves: {
-			read: [],
-			currentlyReading: [],
-			wantToRead: []
-		},
+		books: [],
 		searchResults: []
-	}
-
-	/**
-	* @description Sort the books between three shelves
-	* @param {array} books
-	* @returns {object} Object with three shelves
-	*/
-	sortBooks = (books) => {
-		let read = []
-		let currentlyReading = []
-		let wantToRead = []
-
-		for(let i in books) {
-			if (books[i].shelf === 'read') {
-				read.push(books[i])
-			}
-
-			if (books[i].shelf === 'currentlyReading') {
-				currentlyReading.push(books[i])
-			}
-
-			if (books[i].shelf === 'wantToRead') {
-				wantToRead.push(books[i])
-			}
-		}
-
-		return {
-			read: read,
-			currentlyReading: currentlyReading,
-			wantToRead: wantToRead
-		}
-	}
-
-	/**
-	* @description Method to the book from one shelf to another
-	* @param {object} book
-	* @param {string} shelf
-	*/
-	updateShelves = (book, shelf) => {
-		let currentShelf
-
-		if (!book || !shelf) {
-			return
-		}
-
-		currentShelf= this.state.shelves[book.shelf]
-
-		if (shelf !== 'none') {
-			this.state.shelves[shelf].push(book)
-			book.shelf = shelf
-		}
-
-		if (currentShelf) {
-			currentShelf.splice(currentShelf.indexOf(book), 1)
-		}
-
-		this.setState(this.state.shelves)
 	}
 
 	/**
@@ -78,10 +17,9 @@ class BooksApp extends React.Component {
 	*/
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
-			let shelves = this.sortBooks(books)
 
 			this.setState({
-				shelves: shelves
+				books: books
 			})
 		})
 	}
@@ -96,9 +34,15 @@ class BooksApp extends React.Component {
 			return
 		}
 
-		BooksAPI.update(book, shelf).then((result) => {
-			this.updateShelves(book, shelf)
-		})
+		if (book.shelf !== shelf) {
+			BooksAPI.update(book, shelf).then((result) => {
+				book.shelf = shelf
+
+				this.setState(state => ({
+					books: state.books.filter(b => b.id !== book.id).concat([ book ])
+				}))
+			})
+		}
 	}
 
 	/**
@@ -120,12 +64,17 @@ class BooksApp extends React.Component {
 	}
 
 	render() {
+		const { books, searchResults } = this.state
+		const wantToRead = books.filter(book => book.shelf === 'wantToRead')
+		const currentlyReading = books.filter(book => book.shelf === 'currentlyReading')
+		const read = books.filter(book => book.shelf === 'read')
+
 		return (
 			<div className="app">
 				<Route path="/search" render={({ history }) => (
 					<SearchBooks
 						onSearchSubmit={ this.searchBooks }
-						searchResults={ this.state.searchResults }
+						searchResults={ searchResults }
 						onShelfSelection={ this.moveBook }
 					/>
 				)}/>
@@ -137,17 +86,17 @@ class BooksApp extends React.Component {
 						<div className="list-books-content">
 							<div>
 								<BookShelf
-									books={ this.state.shelves.currentlyReading }
+									books={ currentlyReading }
 									shelfName="Currently Reading"
 									onShelfSelection={ this.moveBook }
 								/>
 								<BookShelf
-									books={ this.state.shelves.wantToRead }
+									books={ wantToRead }
 									shelfName="Want to Read"
 									onShelfSelection={ this.moveBook }
 								/>
 								<BookShelf
-									books={ this.state.shelves.read }
+									books={ read }
 									shelfName="Read"
 									onShelfSelection={ this.moveBook }
 								/>
