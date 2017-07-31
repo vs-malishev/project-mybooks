@@ -14,7 +14,7 @@ sudo npm install
 npm start
 ```
 
-The app has now been set up in the /app directory.
+The app has now been set up in the /src directory.
 
 ## Testing
 Run `npm test`.
