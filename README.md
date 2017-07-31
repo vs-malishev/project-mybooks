@@ -1,4 +1,4 @@
-# Project MyBooks
+# Project MyReads: A Book Tracking App
 
 Application built and delivered as a part of Udacity React Nanodegree Course.
 
