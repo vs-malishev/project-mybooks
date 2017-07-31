@@ -75,6 +75,7 @@ class BooksApp extends React.Component {
 					<SearchBooks
 						onSearchSubmit={ this.searchBooks }
 						searchResults={ searchResults }
+						books={ books }
 						onShelfSelection={ this.moveBook }
 					/>
 				)}/>
