@@ -6,6 +6,7 @@ import sortBy from 'sort-by'
 
 class SearchBooks extends Component {
 	static PropTypes = {
+		books: PropTypes.array.isRequired,
 		searchResults: PropTypes.array.isRequired,
 		onShelfSelection: PropTypes.func.isRequired
 	}
@@ -27,7 +28,7 @@ class SearchBooks extends Component {
 	}
 
 	render() {
-		const { searchResults, onShelfSelection } = this.props
+		const { books, searchResults, onShelfSelection } = this.props
 		const { query} = this.state
 
 		let results
@@ -39,6 +40,14 @@ class SearchBooks extends Component {
 		}
 
 		results.sort(sortBy('title'))
+
+		for (let item of results) {
+			for (let book of books) {
+				if (item.id === book.id) {
+					item.shelf = book.shelf
+				}
+			}
+		}
 
 		return (
 			<div className="search-books">
